@@ -1,7 +1,7 @@
 "use client";
 
 import { TranslationLanguages } from "@/app/translate/page";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormState } from "react-dom";
 import {
   Select,
@@ -26,8 +26,16 @@ export type State = typeof initialState
 
 function TranslationForm({ languages }: { languages: TranslationLanguages }) {
   const [state, formAction] = useFormState(translate, initialState);
-  const [input, setInput] = useState('')
-  const [output, setOutput] = useState('')
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+
+
+  useEffect(() => {
+    if (state.output) {
+      setOutput(state.output);
+    }
+  }, [state]);
+  
 
 
   console.log('state: ', state)
