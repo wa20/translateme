@@ -26,6 +26,7 @@ function Header() {
                 <UserButton />
             </div>
         ) : (
+            // TODO fix redirect 
             <SignInButton 
             signUpForceRedirectUrl="/translate"
             mode="modal" >
