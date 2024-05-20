@@ -34,7 +34,6 @@ async function translate(prevState: State, formData: FormData) {
       "Content-type": "application/json",
       "X-ClientTraceId": v4().toString(),
     },
-
     params: {
       "api-version": "3.0",
       from:
@@ -56,10 +55,10 @@ async function translate(prevState: State, formData: FormData) {
   }
 
   //Push to MongoDB
-//   return {
-//     ...prevState,
-//     output: data[0].translations[0].text,
-//   };
+  return {
+    ...prevState,
+    output: data[0].translations[0].text,
+  };
 }
 
 export default translate;

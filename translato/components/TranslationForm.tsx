@@ -48,7 +48,7 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
       action={formAction}
       >
         <div>
-          <Select name="inputLanguge" defaultValue="auto">
+          <Select name="inputLanguage" defaultValue="auto">
             <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Select a Language" />
             </SelectTrigger>
@@ -82,7 +82,7 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
         </div>
 
         <div>
-          <Select name="outputLanguge" defaultValue="es">
+          <Select name="outputLanguage" defaultValue="es">
             <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Select a Language" />
             </SelectTrigger>
