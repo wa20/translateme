@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import translate from "@/actions/translate";
+import SubmitButton from "./SubmitButton";
+import { Button } from "./ui/button";
+import { Volume2Icon } from "lucide-react";
 
 const initialState = {
   inputLanguage: "auto",
@@ -38,7 +41,7 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
     
     const delayDebounceFn = setTimeout(() => {
       submitBtnRef.current?.click()
-    }, 5000)
+    }, 2000)
     return () => clearTimeout(delayDebounceFn)
 
   }, [input])
@@ -50,7 +53,17 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
     }
   }, [state]);
 
-  console.log("state: ", state);
+  const playAudio = async () => {
+    const synth = window.speechSynthesis;
+
+    if(!output || !synth) return;
+
+    const wordsToSay = new SpeechSynthesisUtterance(output);
+
+    synth.speak(wordsToSay);
+  }
+
+
 
   return (
     <div>
@@ -107,7 +120,8 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
           </div>
 
           <div className="flex-1">
-            <Select name="outputLanguage" defaultValue="es">
+            <div className="flex items-center justify-between">
+              <Select name="outputLanguage" defaultValue="es">
               <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
                 <SelectValue placeholder="Select a Language" />
               </SelectTrigger>
@@ -131,6 +145,24 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            <Button 
+              variant="ghost"
+              type="button"
+              onClick={playAudio}
+              disabled={!output}
+            >
+              <Volume2Icon
+               size={24}
+               className="text-blue-500 cursor-pointer disabled:cursor-not-allowed"
+              />
+              
+            </Button>
+            </div>
+            
+            
+
+
             <Textarea
               className="min-h-32 text-xl"
               placeholder="Type your message here."
@@ -141,8 +173,9 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
           </div>
         </div>
 
-        <div>
-          <button type="submit" ref={submitBtnRef}>Submit</button>
+        <div className="mt-5 flex justify-end">
+          <SubmitButton disabled={!input}/>
+          <button type="submit" ref={submitBtnRef} hidden/>
         </div>
 
       </form>
