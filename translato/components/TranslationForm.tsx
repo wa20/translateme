@@ -38,7 +38,7 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
     
     const delayDebounceFn = setTimeout(() => {
       submitBtnRef.current?.click()
-    }, 500)
+    }, 5000)
     return () => clearTimeout(delayDebounceFn)
 
   }, [input])
