@@ -30,7 +30,7 @@ async function TranslatePage() {
   const languages = (await response.json()) as TranslationLanguages;
 
   return (
-    <div className="">
+    <div className="px-10 xl:px-0 mb-20">
       <TranslationForm languages={languages}/>
     </div>
   );
