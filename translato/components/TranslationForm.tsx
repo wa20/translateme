@@ -54,6 +54,26 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
     }
   }, [state]);
 
+  const uploadAudio = async (blob: Blob) => {
+    const mimeType = "audio/webm";
+
+    const file = new File([blob], "audio.webm", { type: mimeType });
+
+    const formData = new FormData();
+    formData.append("audio", file);
+
+    const response = await fetch("/transcribe-audio", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.text) {
+      setInput(data.text);
+    }
+  };
+
   const playAudio = async () => {
     const synth = window.speechSynthesis;
 
@@ -63,28 +83,6 @@ function TranslationForm({ languages }: { languages: TranslationLanguages }) {
 
     synth.speak(wordsToSay);
   }
-
-  const uploadAudio = async (blob: Blob) => {
-    const mimeType = "audi/webm";
-
-    const file = new File([blob], mimeType, { type: mimeType})
-
-    const formData = new FormData();
-    formData.append("audio", file);
-
-    const response = await fetch('transcribe-audio', {
-      method: "POST",
-      body: formData,
-    })
-
-    const data = await response.json();
-
-    if (data.text) {
-      setInput(data.text);
-    }
-
-  }
-
 
 
   return (
