@@ -18,7 +18,7 @@ const translationSchema = new mongoose.Schema<ITranslation>({
   timestamp: { type: Date, default: Date.now },
   fromText: String,
   from: String,
-  toText: String, 
+  toText: String,
   to: String,
 });
 
@@ -31,19 +31,19 @@ const userSchema = new mongoose.Schema<IUser>({
 const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export async function addOrUpdateUser(
-    userId: string,
-    translation: {
-      fromText: string;
-      from: string;
-      toText: string;
-      to: string;
-    }
+  userId: string,
+  translation: {
+    fromText: string;
+    from: string;
+    toText: string;
+    to: string;
+  }
 ): Promise<IUser> {
-    const filter = { userId: userId };
-    const update = {
-      $set: { userId: userId },
-      $push: { translations: translation },
-    };
+  const filter = { userId: userId };
+  const update = {
+    $set: { userId: userId },
+    $push: { translations: translation },
+  };
 
   // Upsert option ensures that the document is created if it doesn't exist
   // The new: true option in the options object ensures that the method returns the updated document after the operation is complete. If you don't set new: true, the method will return the original document before the update.
@@ -67,5 +67,31 @@ export async function addOrUpdateUser(
   } catch (err) {
     console.error("Error adding or updating user:", err);
     throw err;
+  }
+}
+
+export async function getTranslations(
+  userId: string
+): Promise<Array<ITranslation>> {
+  await connectDB();
+
+  try {
+    const user: IUser | null = await User.findOne({ userId: userId });
+
+    if (user) {
+      // sort translations by timestamp in descending order
+      user.translations.sort(
+        (a: ITranslation, b: ITranslation) =>
+          b.timestamp.getTime() - a.timestamp.getTime()
+      );
+
+      return user.translations; // Return the translations
+    } else {
+      console.log(`User with userId ${userId} not found.`);
+      return [];
+    }
+  } catch (err) {
+    console.error("Error retrieving translations:", err);
+    throw err; // Rethrow the error if you want to handle it outside this function
   }
 }
